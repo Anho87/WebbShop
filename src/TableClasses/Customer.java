@@ -9,6 +9,10 @@ public class Customer {
     private String city;
     private String emailAdress;
     private String password;
+    
+    private final String contactFile = "src/contacts.txt";
+    private final String setTextYellow = "\u001B[33m";
+    private final String turnOffTextYellow = "\u001B[0m";
 
     public Customer() {
 
@@ -91,15 +95,14 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", adress='" + adress + '\'' +
-                ", postalCode=" + postalCode +
-                ", city='" + city + '\'' +
-                ", emailAdress='" + emailAdress + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return setTextYellow + "Customer: " + setTextYellow +
+                "Id: " + turnOffTextYellow + id + setTextYellow +
+                " FirstName: " + turnOffTextYellow + firstName + setTextYellow +
+                " LastName: " + turnOffTextYellow + lastName + setTextYellow +
+                " Address: " + turnOffTextYellow + adress + setTextYellow +
+                " PostalCode: " + turnOffTextYellow + postalCode + setTextYellow +
+                " City: " + turnOffTextYellow + city + setTextYellow +
+                " EmailAdress: " + turnOffTextYellow + emailAdress + setTextYellow +
+                " Password: " + turnOffTextYellow + password;
     }
 }

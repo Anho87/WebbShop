@@ -1,6 +1,6 @@
 package Repository;
 
-import TableClasses.Customer;
+import TableClasses.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -86,7 +86,6 @@ public class Repository {
                 String brand = rs.getString("brand.brand");
                 int size = rs.getInt("size.size");
                 String color = rs.getString("color.color");
-                System.out.println(firstName + " " + lastName + " " + categoryname + " " + brand + " " + size + " " + color);
             }
 
         } catch (SQLException e) {
@@ -94,5 +93,165 @@ public class Repository {
         }
     }
 
+    public List<OrderedItems> getOrderItemsData() {
+        List<OrderedItems> orderedItemsList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, placedOrderId, shoeId from OrderedItems"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int placedOrderId = rs.getInt("placedOrderId");
+                int shoeId = rs.getInt("shoeId");
+                OrderedItems temp = new OrderedItems(id,placedOrderId, shoeId);
+                orderedItemsList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderedItemsList;
+    }
+
+    public List<PlacedOrder> getPlacedOrderData() {
+        List<PlacedOrder> placedOrderList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, customerid from PlacedOrder"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int customerId = rs.getInt("customerId");
+                PlacedOrder temp = new PlacedOrder(id, customerId);
+                placedOrderList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return placedOrderList;
+    }
+
+    public List<Shoe> getShoeData() {
+        List<Shoe> shoeList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, brandId, colorId, sizeId, price, stock from Shoe"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int brandId = rs.getInt("brandId");
+                int colorId = rs.getInt("colorId");
+                int sizeId = rs.getInt("sizeId");
+                int price = rs.getInt("price");
+                int stock = rs.getInt("stock");
+                Shoe temp = new Shoe(id, brandId, colorId, sizeId, price, stock);
+                shoeList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shoeList;
+    }
+
+    public List<Size> getSizeData() {
+        List<Size> sizeList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, size from Size"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int size = rs.getInt("size");
+                Size temp = new Size(id, size);
+                sizeList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sizeList;
+    }
+
+    public List<TelephoneNumber> getTelephoneNumberData() {
+        List<TelephoneNumber> telephoneNumberList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, customerId, telephoneNumber from TelephoneNumber"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int customerId = rs.getInt("customerId");
+                String telephoneNumber = rs.getString("telephoneNumber");
+                TelephoneNumber temp = new TelephoneNumber(id, customerId, telephoneNumber);
+                telephoneNumberList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return telephoneNumberList;
+    }
+    
 }

@@ -4,6 +4,7 @@ public class OrderedItems {
     private int id;
     private int placedOrderId;
     private int shoeId;
+    
 
     public OrderedItems(){
         
@@ -36,5 +37,12 @@ public class OrderedItems {
 
     public void setShoeId(int shoeId) {
         this.shoeId = shoeId;
+    }
+    @Override
+    public String toString() {
+        return  "OrderedItems: " +
+                "Id: " + id +
+                " PlacedOrderId: " + placedOrderId +
+                " ShoeId: " + shoeId;
     }
 }

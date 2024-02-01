@@ -67,4 +67,15 @@ public class Shoe {
     public void setStock(int stock) {
         this.stock = stock;
     }
+
+    @Override
+    public String toString() {
+        return "Shoe: " +
+                "Id: " + id +
+                " BrandId: " + brandId +
+                " ColorId: " + colorId +
+                " SizeId: " + sizeId +
+                " Price: " + price +
+                " Stock: " + stock;
+    }
 }

@@ -38,4 +38,12 @@ public class TelephoneNumber {
     public void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
+
+    @Override
+    public String toString() {
+        return "TelephoneNumber: " +
+                "Id: " + id +
+                " CustomerId: " + customerId +
+                " TelephoneNumber: " + telephoneNumber;
+    }
 }

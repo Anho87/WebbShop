@@ -8,6 +8,8 @@ public class PlacedOrder {
         
     }
 
+    
+
     public PlacedOrder(int id, int customerId) {
         this.id = id;
         this.customerId = customerId;
@@ -27,5 +29,12 @@ public class PlacedOrder {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
+    }
+
+    @Override
+    public String toString() {
+        return "PlacedOrder: " +
+                "Id: " + id +
+                " CustomerId: " + customerId;
     }
 }
