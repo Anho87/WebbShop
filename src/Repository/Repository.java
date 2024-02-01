@@ -253,5 +253,130 @@ public class Repository {
         }
         return telephoneNumberList;
     }
+
+    public List<Brand> getBrandData() {
+        List<Brand> brandList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, brand from Brand"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String brand = rs.getString("brand");
+                Brand temp = new Brand(id, brand);
+                brandList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return brandList;
+    }
+
+    public List<Category> getCategoryData() {
+        List<Category> categoryList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, brandId, categoryNameId from Category"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int brandId = rs.getInt("brandId");
+                int categoryNameId = rs.getInt("categoryNameId");
+                Category temp = new Category(id, brandId, categoryNameId);
+                categoryList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryList;
+    }
+
+    public List<CategoryName> getCategoryNameData() {
+        List<CategoryName> categoryNameList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, categoryName from CategoryName"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String categoryName = rs.getString("categoryName");
+                CategoryName temp = new CategoryName(id, categoryName);
+                categoryNameList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryNameList;
+    }
+
+    public List<Color> getColorData() {
+        List<Color> colorList = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             Statement stmt = c.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "select id, color from Color"
+             )
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String color = rs.getString("color");
+                Color temp = new Color(id, color);
+                colorList.add(temp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colorList;
+    }
     
 }

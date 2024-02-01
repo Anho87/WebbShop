@@ -12,6 +12,10 @@ public class Webbshop {
     private List<Shoe> shoeList;
     private List<Size> sizeList;
     private List<TelephoneNumber> telephoneNumberList;
+    private List<Brand> brandList; 
+    private List<Category> categoryList;
+    private List<CategoryName> categoryNameList;
+    private List<Color> colorList;
     private Repository r = new Repository();
 
     public static void main(String[] args) {
@@ -49,6 +53,26 @@ public class Webbshop {
         
         telephoneNumberList = r.getTelephoneNumberData();
         telephoneNumberList.forEach(e -> System.out.println(e.toString()));
+
+        System.out.println();
+        
+        brandList = r.getBrandData();
+        brandList.forEach(e -> System.out.println(e.toString()));
+
+        System.out.println();
+        
+        categoryList = r.getCategoryData();
+        categoryList.forEach(e -> System.out.println(e.toString()));
+
+        System.out.println();
+        
+        categoryNameList = r.getCategoryNameData();
+        categoryNameList.forEach(e -> System.out.println(e.toString()));
+
+        System.out.println();
+        
+        colorList = r.getColorData();
+        colorList.forEach(e -> System.out.println(e.toString()));
         
         
     }

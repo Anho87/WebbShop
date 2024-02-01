@@ -37,4 +37,12 @@ public class Category {
     public void setCategoryNameId(int categoryNameId) {
         this.categoryNameId = categoryNameId;
     }
+
+    @Override
+    public String toString() {
+        return "Category: " +
+                "Id: " + id +
+                " BrandId: " + brandId +
+                " CategoryNameId: " + categoryNameId;
+    }
 }
