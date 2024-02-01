@@ -6,12 +6,12 @@ import java.util.List;
 
 public class Webbshop {
 
-    private List<Customer> customerList = new ArrayList<>();
-    private List<OrderedItems> orderedItemsList = new ArrayList<>();
-    private List<PlacedOrder> placedOrderList = new ArrayList<>();
-    private List<Shoe> shoeList = new ArrayList<>();
-    private List<Size> sizeList = new ArrayList<>();
-    private List<TelephoneNumber> telephoneNumberList = new ArrayList<>();
+    private List<Customer> customerList;
+    private List<OrderedItems> orderedItemsList;
+    private List<PlacedOrder> placedOrderList;
+    private List<Shoe> shoeList;
+    private List<Size> sizeList;
+    private List<TelephoneNumber> telephoneNumberList;
     private Repository r = new Repository();
 
     public static void main(String[] args) {
