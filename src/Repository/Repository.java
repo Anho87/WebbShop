@@ -27,19 +27,19 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, firstname, Lastname, adress, postalcode, city, emailadress, password from Customer"
+                     "select id, firstname, Lastname, address, postalcode, city, emailaddress, password from Customer"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String firstName = rs.getString("firstname");
                 String lastName = rs.getString("lastname");
-                String adress = rs.getString("adress");
+                String address = rs.getString("address");
                 int postalCode =  rs.getInt("postalcode");
                 String city = rs.getString("city");
-                String emailadress = rs.getString("emailadress");
+                String emailaddress = rs.getString("emailaddress");
                 String password = rs.getString("password");
-                Customer temp = new Customer(id,firstName,lastName,adress,postalCode,city,emailadress,password);
+                Customer temp = new Customer(id,firstName,lastName,address,postalCode,city,emailaddress,password);
                 customerList.add(temp);
                 System.out.println(firstName + " " + lastName + " " );
             }

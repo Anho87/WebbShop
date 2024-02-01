@@ -4,10 +4,10 @@ public class Customer {
     private int id;
     private String firstName;
     private String lastName;
-    private String adress;
+    private String address;
     private int postalCode;
     private String city;
-    private String emailAdress;
+    private String emailAddress;
     private String password;
     
     private final String contactFile = "src/contacts.txt";
@@ -18,14 +18,14 @@ public class Customer {
 
     }
 
-    public Customer(int id, String firstName, String lastName, String adress, int postalCode, String city, String emailAdress, String password) {
+    public Customer(int id, String firstName, String lastName, String address, int postalCode, String city, String emailAddress, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.adress = adress;
+        this.address = address;
         this.postalCode = postalCode;
         this.city = city;
-        this.emailAdress = emailAdress;
+        this.emailAddress = emailAddress;
         this.password = password;
     }
 
@@ -53,12 +53,12 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String adress) {
+        this.address = adress;
     }
 
     public int getPostalCode() {
@@ -77,12 +77,12 @@ public class Customer {
         this.city = city;
     }
 
-    public String getEmailAdress() {
-        return emailAdress;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmailAdress(String emailAdress) {
-        this.emailAdress = emailAdress;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getPassword() {
@@ -99,10 +99,10 @@ public class Customer {
                 "Id: " + turnOffTextYellow + id + setTextYellow +
                 " FirstName: " + turnOffTextYellow + firstName + setTextYellow +
                 " LastName: " + turnOffTextYellow + lastName + setTextYellow +
-                " Address: " + turnOffTextYellow + adress + setTextYellow +
+                " Address: " + turnOffTextYellow + address + setTextYellow +
                 " PostalCode: " + turnOffTextYellow + postalCode + setTextYellow +
                 " City: " + turnOffTextYellow + city + setTextYellow +
-                " EmailAdress: " + turnOffTextYellow + emailAdress + setTextYellow +
+                " EmailAdress: " + turnOffTextYellow + emailAddress + setTextYellow +
                 " Password: " + turnOffTextYellow + password;
     }
 }
