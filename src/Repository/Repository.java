@@ -41,7 +41,6 @@ public class Repository {
                 String password = rs.getString("password");
                 Customer temp = new Customer(id,firstName,lastName,address,postalCode,city,emailaddress,password);
                 customerList.add(temp);
-                System.out.println(firstName + " " + lastName + " " );
             }
 
         } catch (SQLException e) {
