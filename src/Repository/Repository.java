@@ -35,13 +35,12 @@ public class Repository {
                 String firstName = rs.getString("firstname");
                 String lastName = rs.getString("lastname");
                 String address = rs.getString("address");
-                int postalCode = rs.getInt("postalcode");
+                int postalCode =  rs.getInt("postalcode");
                 String city = rs.getString("city");
                 String emailaddress = rs.getString("emailaddress");
                 String password = rs.getString("password");
-                Customer temp = new Customer(id, firstName, lastName, address, postalCode, city, emailaddress, password);
+                Customer temp = new Customer(id,firstName,lastName,address,postalCode,city,emailaddress,password);
                 customerList.add(temp);
-                System.out.println(firstName + " " + lastName + " ");
             }
 
         } catch (SQLException e) {
@@ -49,6 +48,8 @@ public class Repository {
         }
         return customerList;
     }
+        
+        
 
 
     public void printAllShoes() {
@@ -84,8 +85,6 @@ public class Repository {
                 String brand = rs.getString("brand.brand");
                 int size = rs.getInt("size.size");
                 String color = rs.getString("color.color");
-                System.out.println("Namn: " + firstName + " " + lastName + " Kategori: " + categoryname + " Märke: " +
-                        brand + " Storlek: " + size + " Färg " + color);
             }
 
         } catch (SQLException e) {
@@ -115,7 +114,7 @@ public class Repository {
                 int id = rs.getInt("id");
                 int placedOrderId = rs.getInt("placedOrderId");
                 int shoeId = rs.getInt("shoeId");
-                OrderedItems temp = new OrderedItems(id, placedOrderId, shoeId);
+                OrderedItems temp = new OrderedItems(id,placedOrderId, shoeId);
                 orderedItemsList.add(temp);
             }
 
