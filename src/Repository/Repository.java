@@ -378,4 +378,31 @@ public class Repository {
         return colorList;
     }
     
+    public void addToCard(int customerNumber, int orderNumber, int product){
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+                CallableStatement stmt = c.prepareCall(
+                        "call addToCart(?,?,?)"
+                )
+        ){
+            stmt.setInt(1,customerNumber);
+            stmt.setInt(2, orderNumber);
+            stmt.setInt(3,product);
+            int res = stmt.executeUpdate();
+            System.out.println(res + " antal rader uppdaterades");
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
