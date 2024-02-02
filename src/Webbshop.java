@@ -3,6 +3,7 @@ import TableClasses.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Webbshop {
 
@@ -73,7 +74,6 @@ public class Webbshop {
         
         colorList = r.getColorData();
         colorList.forEach(e -> System.out.println(e.toString()));
-        
         
     }
 }
