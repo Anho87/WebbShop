@@ -207,13 +207,21 @@ public class Webbshop {
     
     public void addToOrder(){
         r.addToCard(currentCustomer.getId(),orderId,productId);
-        String shoeInfo = r.shoeInfo(productId);
-        if(orderId == 0){
-            System.out.println(shoeInfo + " lades till i en ny order!");   
-        }else{
-            System.out.println(shoeInfo + " lades till i ordernummer: " + orderId);
-        }
+        brandList.stream().filter(brand -> shoeList.stream()
+                .anyMatch(shoe -> shoe.getBrandId() == brand.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getBrand() + " "));
+        
+        colorList.stream().filter(color -> shoeList.stream()
+                .anyMatch(shoe -> shoe.getColorId() == color.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getColor() + " "));
+       
+        sizeList.stream().filter(size -> shoeList.stream()
+                .anyMatch(shoe -> shoe.getSizeId() == size.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getSize() + " "));
+        
+        shoeList.stream().filter(shoe -> shoe.getId() == productId).forEach(e -> System.out.print(e.getPrice() + "kr lades till i din order!"));
+        System.out.println();
         getAllData();
+        List<PlacedOrder> orderList = placedOrderList.stream()
+                .filter(e -> e.getCustomerId() == currentCustomer.getId()).toList();
+        orderId = orderList.get(orderList.size()-1).getId();
         showCategories();
     }
 }
