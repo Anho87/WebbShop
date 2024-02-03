@@ -1,6 +1,7 @@
 import Repository.Repository;
 import TableClasses.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -86,7 +87,7 @@ public class Webbshop {
                 }
                 break;
             case 3:
-                oldOrders();
+                viewOldOrders();
                 break;
             case 4:
                 System.out.println("Du loggades ut!");
@@ -95,12 +96,18 @@ public class Webbshop {
         }
     }
     
-    public void oldOrders(){
+    public void viewOldOrders(){
         System.out.println("Välj en befintlig order:");
         placedOrderList.stream().filter(e -> e.getCustomerId() == currentCustomer.getId()).forEach(e -> System.out.println("OrderNr: " + e.getId()));
         orderId = sc.nextInt();
-        List<String> tempList = r.orderInfo(orderId);
-        tempList.forEach(e -> System.out.println(e));
+        for (Shoe shoe : shoeList) {
+            for (OrderedItems orderedItem : orderedItemsList) {
+                if (orderedItem.getShoeId() == shoe.getId() && orderedItem.getPlacedOrderId() == orderId) {
+                    printShoeInfo(shoe);
+                    System.out.println();
+                }
+            }
+        }
         String back;
         System.out.println("Tryck 'b' för att gå tillbaka.");
         while(true){
@@ -223,6 +230,16 @@ public class Webbshop {
                 .filter(e -> e.getCustomerId() == currentCustomer.getId()).toList();
         orderId = orderList.get(orderList.size()-1).getId();
         showCategories();
+    }
+    
+    public void printShoeInfo(Shoe shoeId){
+        brandList.stream().filter(brand -> shoeList.stream()
+                .anyMatch(shoe -> shoe.getBrandId() == brand.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getBrand() + " "));
+        colorList.stream().filter(color -> shoeList.stream()
+                .anyMatch(shoe -> shoe.getColorId() == color.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getColor() + " "));
+        sizeList.stream().filter(size -> shoeList.stream()
+                .anyMatch(shoe -> shoe.getSizeId() == size.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getSize() + " "));
+        shoeList.stream().filter(shoe -> shoe.getId() == shoeId.getId()).forEach(e -> System.out.print(e.getPrice() + "kr"));
     }
 }
     

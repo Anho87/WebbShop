@@ -359,42 +359,4 @@ public class Repository {
             e.printStackTrace();
         }
     }
-
-    public List<String> orderInfo(int orderNumber) {
-        List<String> productInfo = new ArrayList<>();
-        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
-            p.load(fileInput);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (Connection c = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-
-             PreparedStatement stmt = c.prepareStatement(
-                     "select brand.brand, color.color, size.size, shoe.price from brand\n" +
-                             "inner join shoe on shoe.brandid = brand.id\n" +
-                             "inner join size on shoe.sizeid = size.id\n" +
-                             "inner join color on color.id = shoe.colorid\n" +
-                             "inner join ordereditems on ordereditems.shoeid = shoe.id\n" +
-                             "where ordereditems.placedorderid = ?"
-             )
-        ) {
-            stmt.setInt(1, orderNumber);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()){
-                String brand = rs.getString("brand.brand");
-                String color = rs.getString("color.color");
-                int size = rs.getInt("size.size");
-                int price = rs.getInt("shoe.price");
-                String temp = brand + " " + color + " " + size + " " + price + "kr";
-                productInfo.add(temp);  
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return productInfo;
-    }
 }
