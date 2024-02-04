@@ -35,11 +35,11 @@ public class Repository {
                 String firstName = rs.getString("firstname");
                 String lastName = rs.getString("lastname");
                 String address = rs.getString("address");
-                int postalCode =  rs.getInt("postalcode");
+                int postalCode = rs.getInt("postalcode");
                 String city = rs.getString("city");
                 String emailaddress = rs.getString("emailaddress");
                 String password = rs.getString("password");
-                Customer temp = new Customer(id,firstName,lastName,address,postalCode,city,emailaddress,password);
+                Customer temp = new Customer(id, firstName, lastName, address, postalCode, city, emailaddress, password);
                 customerList.add(temp);
             }
 
@@ -47,49 +47,6 @@ public class Repository {
             e.printStackTrace();
         }
         return customerList;
-    }
-        
-        
-
-
-    public void printAllShoes() {
-        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
-            p.load(fileInput);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (Connection c = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-
-             Statement stmt = c.createStatement();
-             ResultSet rs = stmt.executeQuery(
-                     "select customer.firstname, customer.Lastname, categoryname.categoryname, brand.brand, size.size, color.color from customer\n" +
-                             "inner join placedorder on placedorder.customerid = customer.id\n" +
-                             "inner join ordereditems on ordereditems.PlacedOrderid = placedorder.id\n" +
-                             "inner join shoe on shoe.id = ordereditems.shoeid\n" +
-                             "inner join size on shoe.sizeid = size.id\n" +
-                             "inner join color on color.id = shoe.colorid\n" +
-                             "inner join brand on shoe.brandid = brand.id\n" +
-                             "inner join category on category.brandid = brand.id\n" +
-                             "inner join categoryname on categoryname.id = category.CategoryNameID\n" +
-                             "where categoryname.categoryname = 'sandaler'  and brand.brand like '%ecco%' and size.size = 38 and color.color = 'black';"
-             )
-        ) {
-            while (rs.next()) {
-                String firstName = rs.getString("customer.firstname");
-                String lastName = rs.getString("customer.lastname");
-                String categoryname = rs.getString("categoryname.categoryname");
-                String brand = rs.getString("brand.brand");
-                int size = rs.getInt("size.size");
-                String color = rs.getString("color.color");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public List<OrderedItems> getOrderItemsData() {
@@ -114,7 +71,7 @@ public class Repository {
                 int id = rs.getInt("id");
                 int placedOrderId = rs.getInt("placedOrderId");
                 int shoeId = rs.getInt("shoeId");
-                OrderedItems temp = new OrderedItems(id,placedOrderId, shoeId);
+                OrderedItems temp = new OrderedItems(id, placedOrderId, shoeId);
                 orderedItemsList.add(temp);
             }
 
@@ -377,8 +334,8 @@ public class Repository {
         }
         return colorList;
     }
-    
-    public void addToCard(int customerNumber, int orderNumber, int product){
+
+    public void addToCard(int customerNumber, int orderNumber, int product) {
         try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
             p.load(fileInput);
         } catch (IOException e) {
@@ -390,19 +347,54 @@ public class Repository {
                 p.getProperty("name"),
                 p.getProperty("password"));
 
-                CallableStatement stmt = c.prepareCall(
-                        "call addToCart(?,?,?)"
-                )
-        ){
-            stmt.setInt(1,customerNumber);
+             CallableStatement stmt = c.prepareCall(
+                     "call addToCart(?,?,?)"
+             )
+        ) {
+            stmt.setInt(1, customerNumber);
             stmt.setInt(2, orderNumber);
-            stmt.setInt(3,product);
-            int res = stmt.executeUpdate();
-            System.out.println(res + " antal rader uppdaterades");
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
+            stmt.setInt(3, product);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-    
+
+    public List<String> orderInfo(int orderNumber) {
+        List<String> productInfo = new ArrayList<>();
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             PreparedStatement stmt = c.prepareStatement(
+                     "select brand.brand, color.color, size.size, shoe.price from brand\n" +
+                             "inner join shoe on shoe.brandid = brand.id\n" +
+                             "inner join size on shoe.sizeid = size.id\n" +
+                             "inner join color on color.id = shoe.colorid\n" +
+                             "inner join ordereditems on ordereditems.shoeid = shoe.id\n" +
+                             "where ordereditems.placedorderid = ?"
+             )
+        ) {
+            stmt.setInt(1, orderNumber);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                String brand = rs.getString("brand.brand");
+                String color = rs.getString("color.color");
+                int size = rs.getInt("size.size");
+                int price = rs.getInt("shoe.price");
+                String temp = brand + " " + color + " " + size + " " + price + "kr";
+                productInfo.add(temp);  
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productInfo;
+    }
 }
