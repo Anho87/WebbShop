@@ -400,8 +400,8 @@ public class Repository {
             int res = stmt.executeUpdate();
             System.out.println(res + " antal rader uppdaterades");
         }
-        catch (SQLException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
     

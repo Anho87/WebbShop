@@ -70,15 +70,22 @@ public class Webbshop {
         System.out.println("Vill du lägga till produkter till en befintlig order eller skapa en ny?");
         System.out.println("1. Skapa en ny order.\n2. Lägg till i en befintlig order.");
         int a = sc.nextInt();
-        if (a == 1) {
-            orderId = 0;
-            showCategories();
-        } else {
-            System.out.println("Välj en befintlig order:");
-            placedOrderList.stream().filter(e -> e.getCustomerId() == currentCustomer.getId()).forEach(e -> System.out.println("OrderNr: " + e.getId()));
-            orderId = sc.nextInt();
-            showCategories();
+
+        switch (a) {
+            case 1 -> {
+                orderId = 0;
+                showCategories();
+            }
+
+            case 2 -> {
+                System.out.println("Välj en befintlig order:");
+                placedOrderList.stream().filter(e -> e.getCustomerId() == currentCustomer.getId()).forEach(e -> System.out.println("OrderNr: " + e.getId()));
+                orderId = sc.nextInt();
+                showCategories();
+            }
+            
         }
+
 
     }
 
@@ -149,9 +156,9 @@ public class Webbshop {
         //System.out.println("ProdukId är " + productId);
         addToOrder();
     }
-    
-    public void addToOrder(){
-        r.addToCard(currentCustomer.getId(),orderId,productId);
+
+    public void addToOrder() {
+        r.addToCard(currentCustomer.getId(), orderId, productId);
     }
 }
     
