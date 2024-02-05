@@ -43,7 +43,7 @@ public class SalesApplication {
             System.out.println("1. Specifika produkter\n2. Antal ordrar/kund\n3. Totala Beställningsvärdet/kund" +
                     "\n4. Top 5 mest sålda produkterna\n5 Avsluta");
             int choice = sc.nextInt();
-
+ 
             switch (choice) {
                 case 1:
                     System.out.println("Skriv in färg: ");
