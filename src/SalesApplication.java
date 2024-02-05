@@ -46,7 +46,7 @@ public class SalesApplication {
             System.out.println("skriv in storlek");
             int size = sc.nextInt();
             System.out.println("Skriv in märke");
-            String brand = sc.next().trim();
+            String brand = sc.next();
             sales(color, size, brand);
             break;
             
