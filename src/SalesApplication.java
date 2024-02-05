@@ -1,10 +1,7 @@
 import Repository.Repository;
 import TableClasses.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SalesApplication {
@@ -19,6 +16,8 @@ public class SalesApplication {
     private List<Category> categoryList;
     private List<CategoryName> categoryNameList;
     private List<Color> colorList;
+    private final String setTextYellow = "\u001B[33m";
+    private final String turnOffTextYellow = "\u001B[0m";
     private Repository r = new Repository();
 
     public void getAllData() {
@@ -36,27 +35,40 @@ public class SalesApplication {
 
     public SalesApplication() {
         getAllData();
-        System.out.println("Vilken rapport vill du se?");
-        System.out.println("1.\n2.\n3.\n4.\n5.");
-        int choice = sc.nextInt();
-        
-        switch (choice) {
-            case 1: System.out.println("Skriv in färg: ");
-            String color = sc.next().trim();
-            System.out.println("skriv in storlek");
-            int size = sc.nextInt();
-            System.out.println("Skriv in märke");
-            String brand = sc.next().trim();
-            sales(color, size, brand);
-            break;
-            
-            case 2: ordersPerCustomer();
-            break;
-            
-            case 3: totalSalesamountPerCustomer();
-            break;
+        while (true) {
+            System.out.println(setTextYellow + "Vilken rapport vill du se?" + turnOffTextYellow);
+            System.out.println("1. Specifika produkter\n2. Antal ordrar/kund\n3. Totala Beställningsvärdet/kund" +
+                    "\n4. Top 5 mest sålda produkterna\n5 Avsluta");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Skriv in färg: ");
+                    String color = sc.next().trim();
+                    System.out.println("skriv in storlek");
+                    int size = sc.nextInt();
+                    System.out.println("Skriv in märke");
+                    String brand = sc.next().toLowerCase();
+                    sales(color, size, brand);
+                    break;
+
+                case 2:
+                    ordersPerCustomer();
+                    break;
+
+                case 3:
+                    totalSalesamountPerCustomer();
+                    break;
+
+                case 4:
+                    topFiveMostSoldShoes();
+                    break;
+
+                case 5:
+                    System.exit(0);
+            }
+
         }
-        
     }
 
     public void sales(String inColor, int inSize, String inBrand) {
@@ -77,11 +89,17 @@ public class SalesApplication {
                                                 && orderedItems.getPlacedOrderId() == placedOrder.getId()
                                                 && placedOrder.getCustomerId() == customer.getId()))))
                 .toList();
-        filteredCustomers.forEach(e -> System.out.println(e.getFirstName() + " " + e.getLastName()
-                + " " + e.getAddress() + " " + e.getPostalCode() + " " + e.getCity()));
+
+        if (filteredCustomers.isEmpty()) {
+            System.out.println("Ingen match hittades");
+        } else {
+            System.out.println(setTextYellow + "Rapport: Specifika produkter" + turnOffTextYellow);
+            filteredCustomers.forEach(e -> System.out.println(e.getFirstName() + " " + e.getLastName()
+                    + " " + e.getAddress() + " " + e.getPostalCode() + " " + e.getCity()));
+        }
     }
-    
-    public void totalSalesamountPerCustomer(){
+
+    public void totalSalesamountPerCustomer() {
         Map<Integer, Integer> customerTotal = new HashMap<>();
 
         for (PlacedOrder placedOrder : placedOrderList) {
@@ -108,13 +126,14 @@ public class SalesApplication {
             }
         }
 
-        System.out.println("Kundrapport: Totala beställningsvärde");
+        System.out.println(setTextYellow + "Kundrapport: Totala beställningsvärde" + turnOffTextYellow);
         customerTotal.forEach((customerId, totalAmount) -> customerList.stream()
                 .filter(c -> c.getId() == customerId)
                 .findFirst().ifPresent(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()
                         + ": Total summa - " + totalAmount)));
-    
+
     }
+
     public void ordersPerCustomer() {
         Map<Integer, Integer> ordersCount = new HashMap<>();
 
@@ -125,7 +144,7 @@ public class SalesApplication {
             ordersCount.put(customerId, ordersAmount);
         }
 
-        System.out.println("Kundrapport: Antal ordrar");
+        System.out.println(setTextYellow + "Kundrapport: Antal ordrar" + turnOffTextYellow);
         ordersCount.forEach((customerId, ordersAmount) -> {
             customerList.stream()
                     .filter(c -> c.getId() == customerId)
@@ -134,10 +153,30 @@ public class SalesApplication {
 
         });
     }
-    
+
+    public void topFiveMostSoldShoes() {
+        Map<Integer, Integer> topBrandMap = shoeList.stream()
+                .filter(shoe -> orderedItemsList.stream()
+                        .anyMatch(orderedItem -> orderedItem.getShoeId() == shoe.getId()))
+                .collect(Collectors.groupingBy(Shoe::getBrandId, Collectors.summingInt(i -> 1)));
+
+        System.out.println(setTextYellow + "Topplista över mest sålda varumärken:" + turnOffTextYellow);
+        topBrandMap.entrySet().stream()
+                .sorted((x, y) -> y.getValue().compareTo(x.getValue()))
+                .limit(5)
+                .forEach(e -> brandList.stream()
+                        .filter(b -> b.getId() == e.getKey())
+                        .findFirst().ifPresent(brand -> System.out.println(brand.getBrand() + ": " + e.getValue() + " st")));
+    }
+
 
     public static void main(String[] args) {
         new SalesApplication();
     }
 }
 
+
+
+
+
+   

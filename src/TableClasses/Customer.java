@@ -9,8 +9,6 @@ public class Customer {
     private String city;
     private String emailAddress;
     private String password;
-    
-    private final String contactFile = "src/contacts.txt";
     private final String setTextYellow = "\u001B[33m";
     private final String turnOffTextYellow = "\u001B[0m";
 
