@@ -38,39 +38,39 @@ public class SalesApplication {
 
     public SalesApplication() {
         getAllData();
-        while (true) {
-            System.out.println(setTextYellow + "Vilken rapport vill du se?" + turnOffTextYellow);
-            System.out.println("1. Specifika produkter\n2. Antal ordrar/kund\n3. Totala Beställningsvärdet/kund" +
-                    "\n4. Top 5 mest sålda produkterna\n5. Avsluta");
-            int choice = sc.nextInt();
- 
-            switch (choice) {
-                case 1:
-                    System.out.println("Skriv in färg: ");
-                    String color = sc.next().trim();
-                    System.out.println("skriv in storlek");
-                    int size = sc.nextInt();
-                    System.out.println("Skriv in märke");
-                    String brand = sc.next().toLowerCase();
-                    sales(color, size, brand);
-                    break;
+        options();
+    }
+    public void options(){
+        System.out.println(setTextYellow + "Vilken rapport vill du se?" + turnOffTextYellow);
+        System.out.println("1. Specifika produkter\n2. Antal ordrar/kund\n3. Totala Beställningsvärdet/kund" +
+                "\n4. Top 5 mest sålda produkterna\n5 Avsluta");
+        int choice = sc.nextInt();
 
-                case 2:
-                    ordersPerCustomer();
-                    break;
+        switch (choice) {
+            case 1:
+                System.out.println("Skriv in färg: ");
+                String color = sc.next().trim();
+                System.out.println("skriv in storlek");
+                int size = sc.nextInt();
+                System.out.println("Skriv in märke");
+                String brand = sc.next().toLowerCase();
+                sales(color, size, brand);
+                break;
 
-                case 3:
-                    totalSalesamountPerCustomer();
-                    break;
+            case 2:
+                ordersPerCustomer();
+                break;
 
-                case 4:
-                    topFiveMostSoldShoes();
-                    break;
+            case 3:
+                totalSalesamountPerCustomer();
+                break;
 
-                case 5:
-                    System.exit(0);
-            }
+            case 4:
+                topFiveMostSoldShoes();
+                break;
 
+            case 5:
+                System.exit(0);
         }
     }
 
@@ -95,10 +95,12 @@ public class SalesApplication {
 
         if (filteredCustomers.isEmpty()) {
             System.out.println("Ingen match hittades");
+            options();
         } else {
             System.out.println(setTextYellow + "Rapport: Specifika produkter" + turnOffTextYellow);
             filteredCustomers.forEach(e -> System.out.println(e.getFirstName() + " " + e.getLastName()
                     + " " + e.getAddress() + " " + e.getPostalCode() + " " + e.getCity()));
+            options();
         }
     }
 
@@ -134,6 +136,7 @@ public class SalesApplication {
                 .filter(c -> c.getId() == customerId)
                 .findFirst().ifPresent(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()
                         + ": Total summa - " + totalAmount)));
+        options();
 
     }
 
@@ -155,6 +158,7 @@ public class SalesApplication {
                             + ": Total Orders - " + ordersAmount));
 
         });
+        options();
     }
 
     public void topFiveMostSoldShoes() {
@@ -170,6 +174,7 @@ public class SalesApplication {
                 .forEach(e -> brandList.stream()
                         .filter(b -> b.getId() == e.getKey())
                         .findFirst().ifPresent(brand -> System.out.println(brand.getBrand() + ": " + e.getValue() + " st")));
+        options();
     }
 
 
