@@ -41,7 +41,7 @@ public class SalesApplication {
         while (true) {
             System.out.println(setTextYellow + "Vilken rapport vill du se?" + turnOffTextYellow);
             System.out.println("1. Specifika produkter\n2. Antal ordrar/kund\n3. Totala Beställningsvärdet/kund" +
-                    "\n4. Top 5 mest sålda produkterna\n5 Avsluta");
+                    "\n4. Top 5 mest sålda produkterna\n5. Avsluta");
             int choice = sc.nextInt();
  
             switch (choice) {
