@@ -335,7 +335,7 @@ public class Repository {
         return colorList;
     }
 
-    public void addToCard(int customerNumber, int orderNumber, int product) {
+    public void addToCart(int customerNumber, int orderNumber, int product) {
         try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
             p.load(fileInput);
         } catch (IOException e) {

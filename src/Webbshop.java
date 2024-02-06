@@ -1,7 +1,6 @@
 import Repository.Repository;
 import TableClasses.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -213,7 +212,7 @@ public class Webbshop {
     }
     
     public void addToOrder(){
-        r.addToCard(currentCustomer.getId(),orderId,productId);
+        r.addToCart(currentCustomer.getId(),orderId,productId);
         brandList.stream().filter(brand -> shoeList.stream()
                 .anyMatch(shoe -> shoe.getBrandId() == brand.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getBrand() + " "));
         
