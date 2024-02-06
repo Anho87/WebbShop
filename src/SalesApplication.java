@@ -38,71 +38,79 @@ public class SalesApplication {
 
     public SalesApplication() {
         getAllData();
+        brandList.forEach(brand -> System.out.println(brand.getBrand()));
         options();
     }
     public void options(){
         System.out.println(setTextYellow + "Vilken rapport vill du se?" + turnOffTextYellow);
         System.out.println("1. Specifika produkter\n2. Antal ordrar/kund\n3. Totala Beställningsvärdet/kund" +
                 "\n4. Top 5 mest sålda produkterna\n5 Avsluta");
-        int choice = sc.nextInt();
+        String choice = sc.nextLine();
 
         switch (choice) {
-            case 1:
-                System.out.println("Skriv in färg: ");
-                String color = sc.next().trim();
-                System.out.println("skriv in storlek");
-                int size = sc.nextInt();
-                System.out.println("Skriv in märke");
-                String brand = sc.next().toLowerCase();
-                //sales(color, size, brand);
+            case "1":
+                sales();
                 break;
 
-            case 2:
+            case "2":
                 ordersPerCustomer();
                 break;
 
-            case 3:
+            case "3":
                 totalSalesamountPerCustomer();
                 break;
 
-            case 4:
+            case "4":
                 //topFiveMostSoldShoes();
                 break;
 
-            case 5:
+            case "5":
                 System.exit(0);
         }
     }
 
-    /*public void sales(String inColor, int inSize, String inBrand) {
-        List<Color> colorIdList = colorList.stream().filter(color -> color.getColor().equalsIgnoreCase(inColor)).toList();
-        int colorId = colorIdList.get(0).getId();
-        List<Size> sizeIdList = sizeList.stream().filter(size -> size.getSize() == inSize).toList();
-        int sizeId = sizeIdList.get(0).getId();
-        List<Brand> brandIdList = brandList.stream().filter(brand -> brand.getBrand().toLowerCase().contains(inBrand)).toList();
-        int brandId = brandIdList.get(0).getId();
-        List<Customer> filteredCustomers = customerList.stream()
-                .filter(customer -> placedOrderList.stream()
-                        .anyMatch(placedOrder -> orderedItemsList.stream()
-                                .anyMatch(orderedItems -> shoeList.stream()
-                                        .anyMatch(shoe -> shoe.getColorId() == colorId
-                                                && shoe.getSizeId() == sizeId
-                                                && shoe.getBrandId() == brandId
-                                                && shoe.getId() == orderedItems.getShoeId()
-                                                && orderedItems.getPlacedOrderId() == placedOrder.getId()
-                                                && placedOrder.getCustomerId() == customer.getId()))))
+    public void sales() {
+        System.out.println("Skriv in färg: ");
+        String inColor = sc.nextLine();
+        System.out.println("skriv in storlek");
+        int inSize = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Skriv in märke");
+        String inBrand = sc.nextLine();
+
+        List<Shoe> filteredShoeList = shoeList.stream()
+                .filter(shoe -> shoe.getBrand().getBrand().equalsIgnoreCase(inBrand)
+                        && shoe.getSize().getSize() == inSize
+                        && shoe.getColor().getColor().equalsIgnoreCase(inColor))
                 .toList();
 
-        if (filteredCustomers.isEmpty()) {
-            System.out.println("Ingen match hittades");
-            options();
-        } else {
-            System.out.println(setTextYellow + "Rapport: Specifika produkter" + turnOffTextYellow);
-            filteredCustomers.forEach(e -> System.out.println(e.getFirstName() + " " + e.getLastName()
-                    + " " + e.getAddress() + " " + e.getPostalCode() + " " + e.getCity()));
+        if (!filteredShoeList.isEmpty()) {
+            int shoeId = filteredShoeList.get(0).getId();
+
+            List<Customer> filteredCustomers = customerList.stream()
+                    .filter(customer -> placedOrderList.stream()
+                            .anyMatch(placedOrder -> orderedItemsList.stream()
+                                    .anyMatch(orderedItems -> shoeList.stream()
+                                            .anyMatch(shoe -> shoe.getId() == shoeId
+                                                    && shoe.getId() == orderedItems.getShoe().getId()
+                                                    && orderedItems.getPlacedOrder().getId() == placedOrder.getId()
+                                                    && placedOrder.getCustomer().getId() == customer.getId()))))
+                    .toList();
+            System.out.println(filteredCustomers.size());
+            if (filteredCustomers.isEmpty()) {
+                System.out.println("Ingen har köpt dessa skor");
+                options();
+            } else {
+                System.out.println(setTextYellow + "Rapport: Specifika produkter" + turnOffTextYellow);
+                filteredCustomers.forEach(e -> System.out.println(e.getFirstName() + " " + e.getLastName()
+                        + " " + e.getAddress() + " " + e.getPostalCode() + " " + e.getCity()));
+                options();
+            }
+        }else {
+            System.out.println("Ingen matchande skor hittades");
             options();
         }
-    }*/
+    }
 
     public void totalSalesamountPerCustomer() {
         Map<Integer, Integer> customerTotal = new HashMap<>();
