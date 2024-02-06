@@ -75,7 +75,7 @@ public class Webbshop {
                 break;
             case 2:
                 System.out.println("Välj en befintlig order:");
-                placedOrderList.stream().filter(e -> e.getCustomerId() == currentCustomer.getId()).forEach(e -> System.out.println("OrderNr: " + e.getId()));
+                placedOrderList.stream().filter(e -> e.getCustomer().getId() == currentCustomer.getId()).forEach(e -> System.out.println("OrderNr: " + e.getId()));
                 System.out.println("Tryck 'b' för att gå tillbaka.");
                 String userChoise = sc.next();
                 if(userChoise.equalsIgnoreCase("b")){
@@ -97,11 +97,11 @@ public class Webbshop {
     
     public void viewOldOrders(){
         System.out.println("Välj en befintlig order:");
-        placedOrderList.stream().filter(e -> e.getCustomerId() == currentCustomer.getId()).forEach(e -> System.out.println("OrderNr: " + e.getId()));
+        placedOrderList.stream().filter(e -> e.getCustomer().getId() == currentCustomer.getId()).forEach(e -> System.out.println("OrderNr: " + e.getId()));
         orderId = sc.nextInt();
         for (Shoe shoe : shoeList) {
             for (OrderedItems orderedItem : orderedItemsList) {
-                if (orderedItem.getShoeId() == shoe.getId() && orderedItem.getPlacedOrderId() == orderId) {
+                if (orderedItem.getShoe().getId() == shoe.getId() && orderedItem.getPlacedOrder().getId() == orderId) {
                     printShoeInfo(shoe);
                     System.out.println();
                 }
@@ -140,7 +140,7 @@ public class Webbshop {
         System.out.println("Välj en sko:");
         List<Brand> chosenBrand = brandList.stream()
                 .filter(brand -> categoryList.stream()
-                        .anyMatch(category -> category.getBrandId() == brand.getId() && category.getCategoryNameId() == chosenCategoryId))
+                        .anyMatch(category -> category.getBrand().getId() == brand.getId() && category.getCategoryName().getId() == chosenCategoryId))
                 .toList();
         for (int i = 1; i < chosenBrand.size() + 1; i++) {
             System.out.println(i + ": " + chosenBrand.get(i - 1).getBrand());
@@ -163,7 +163,7 @@ public class Webbshop {
         System.out.println("Välj en färg:");
         List<Color> colorOfChosenBrand = colorList.stream()
                 .filter(color -> shoeList.stream()
-                        .anyMatch(shoe -> shoe.getColorId() == color.getId() && shoe.getBrandId() == chosenBrandId))
+                        .anyMatch(shoe -> shoe.getColor().getId() == color.getId() && shoe.getBrand().getId() == chosenBrandId))
                 .toList();
         for (int i = 1; i < colorOfChosenBrand.size() + 1; i++) {
             System.out.println(i + ": " + colorOfChosenBrand.get(i - 1).getColor());
@@ -186,9 +186,9 @@ public class Webbshop {
         System.out.println("Välj en storlek:");
         List<Size> sizesOfChosenColor = sizeList.stream()
                 .filter(size -> shoeList.stream()
-                        .anyMatch(shoe -> shoe.getSizeId() == size.getId() &&
-                                shoe.getBrandId() == chosenBrandId &&
-                                shoe.getColorId() == chosenColorId &&
+                        .anyMatch(shoe -> shoe.getSize().getId() == size.getId() &&
+                                shoe.getBrand().getId() == chosenBrandId &&
+                                shoe.getColor().getId() == chosenColorId &&
                                 shoe.getStock() > 0))
                 .toList();
         for (int i = 1; i < sizesOfChosenColor.size() + 1; i++) {
@@ -202,7 +202,7 @@ public class Webbshop {
             try{
                 int chosenSizeId = sizesOfChosenColor.get(Integer.parseInt(userChoise) - 1).getId();
                 List<Integer> res = shoeList.stream()
-                        .filter(e -> e.getBrandId() == chosenBrandId && e.getColorId() == chosenColorId && e.getSizeId() == chosenSizeId).map(Shoe::getId).toList();
+                        .filter(e -> e.getBrand().getId() == chosenBrandId && e.getColor().getId() == chosenColorId && e.getSize().getId() == chosenSizeId).map(Shoe::getId).toList();
                 productId = res.get(0);
                 addToOrder();
             }catch (NumberFormatException e) {
@@ -214,30 +214,30 @@ public class Webbshop {
     public void addToOrder(){
         r.addToCart(currentCustomer.getId(),orderId,productId);
         brandList.stream().filter(brand -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getBrandId() == brand.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getBrand() + " "));
+                .anyMatch(shoe -> shoe.getBrand().getId() == brand.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getBrand() + " "));
         
         colorList.stream().filter(color -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getColorId() == color.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getColor() + " "));
+                .anyMatch(shoe -> shoe.getColor().getId() == color.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getColor() + " "));
        
         sizeList.stream().filter(size -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getSizeId() == size.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getSize() + " "));
+                .anyMatch(shoe -> shoe.getSize().getId() == size.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getSize() + " "));
         
         shoeList.stream().filter(shoe -> shoe.getId() == productId).forEach(e -> System.out.print(e.getPrice() + "kr lades till i din order!"));
         System.out.println();
         getAllData();
         List<PlacedOrder> orderList = placedOrderList.stream()
-                .filter(e -> e.getCustomerId() == currentCustomer.getId()).toList();
+                .filter(e -> e.getCustomer().getId() == currentCustomer.getId()).toList();
         orderId = orderList.get(orderList.size()-1).getId();
         showCategories();
     }
     
     public void printShoeInfo(Shoe shoeId){
         brandList.stream().filter(brand -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getBrandId() == brand.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getBrand() + " "));
+                .anyMatch(shoe -> shoe.getBrand().getId() == brand.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getBrand() + " "));
         colorList.stream().filter(color -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getColorId() == color.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getColor() + " "));
+                .anyMatch(shoe -> shoe.getColor().getId() == color.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getColor() + " "));
         sizeList.stream().filter(size -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getSizeId() == size.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getSize() + " "));
+                .anyMatch(shoe -> shoe.getSize().getId() == size.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getSize() + " "));
         shoeList.stream().filter(shoe -> shoe.getId() == shoeId.getId()).forEach(e -> System.out.print(e.getPrice() + "kr"));
     }
 }

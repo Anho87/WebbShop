@@ -2,20 +2,21 @@ package TableClasses;
 
 public class Shoe {
     private int id;
-    private int brandId;
-    private int colorId;
-    private int sizeId;
+    private Brand brand;
+    private Color color;
+    private Size size;
     private int price;
     private int stock;
     
     public Shoe(){
         
     }
-    public Shoe(int id, int brandId, int colorId, int sizeId, int price, int stock) {
+
+    public Shoe(int id, Brand brand, Color colo, Size size, int price, int stock) {
         this.id = id;
-        this.brandId = brandId;
-        this.colorId = colorId;
-        this.sizeId = sizeId;
+        this.brand = brand;
+        this.color = colo;
+        this.size = size;
         this.price = price;
         this.stock = stock;
     }
@@ -28,28 +29,28 @@ public class Shoe {
         this.id = id;
     }
 
-    public int getBrandId() {
-        return brandId;
+    public Brand getBrand() {
+        return brand;
     }
 
-    public void setBrandId(int brandId) {
-        this.brandId = brandId;
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 
-    public int getColorId() {
-        return colorId;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorId(int colorId) {
-        this.colorId = colorId;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
-    public int getSizeId() {
-        return sizeId;
+    public Size getSize() {
+        return size;
     }
 
-    public void setSizeId(int sizeId) {
-        this.sizeId = sizeId;
+    public void setSize(Size size) {
+        this.size = size;
     }
 
     public int getPrice() {
@@ -72,9 +73,9 @@ public class Shoe {
     public String toString() {
         return "Shoe: " +
                 "Id: " + id +
-                " BrandId: " + brandId +
-                " ColorId: " + colorId +
-                " SizeId: " + sizeId +
+                " BrandId: " + brand.getBrand() +
+                " ColorId: " + color.getColor() +
+                " SizeId: " + size.getSize() +
                 " Price: " + price +
                 " Stock: " + stock;
     }

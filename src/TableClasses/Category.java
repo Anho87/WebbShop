@@ -2,16 +2,16 @@ package TableClasses;
 
 public class Category {
     private int id;
-    private int brandId;
-    private int categoryNameId;
+    private Brand brand;
+    private CategoryName categoryName;
 
     public Category(){
         
     }
-    public Category(int id, int brandId, int categoryNameId) {
+    public Category(int id, Brand brand, CategoryName categoryName) {
         this.id = id;
-        this.brandId = brandId;
-        this.categoryNameId = categoryNameId;
+        this.brand = brand;
+        this.categoryName = categoryName;
     }
 
     public int getId() {
@@ -22,27 +22,27 @@ public class Category {
         this.id = id;
     }
 
-    public int getBrandId() {
-        return brandId;
+    public Brand getBrand() {
+        return brand;
     }
 
-    public void setBrandId(int brandId) {
-        this.brandId = brandId;
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 
-    public int getCategoryNameId() {
-        return categoryNameId;
+    public CategoryName getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategoryNameId(int categoryNameId) {
-        this.categoryNameId = categoryNameId;
+    public void setCategoryName(CategoryName categoryName) {
+        this.categoryName = categoryName;
     }
 
     @Override
     public String toString() {
         return "Category: " +
                 "Id: " + id +
-                " BrandId: " + brandId +
-                " CategoryNameId: " + categoryNameId;
+                " BrandId: " + brand.getBrand() +
+                " CategoryNameId: " + categoryName.getCategoryName();
     }
 }

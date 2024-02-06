@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class SalesApplication {
-    private Scanner sc = new Scanner(System.in);
+   private Scanner sc = new Scanner(System.in);
     private List<Customer> customerList;
     private List<OrderedItems> orderedItemsList;
     private List<PlacedOrder> placedOrderList;
@@ -54,7 +54,7 @@ public class SalesApplication {
                 int size = sc.nextInt();
                 System.out.println("Skriv in märke");
                 String brand = sc.next().toLowerCase();
-                sales(color, size, brand);
+                //sales(color, size, brand);
                 break;
 
             case 2:
@@ -66,7 +66,7 @@ public class SalesApplication {
                 break;
 
             case 4:
-                topFiveMostSoldShoes();
+                //topFiveMostSoldShoes();
                 break;
 
             case 5:
@@ -74,7 +74,7 @@ public class SalesApplication {
         }
     }
 
-    public void sales(String inColor, int inSize, String inBrand) {
+    /*public void sales(String inColor, int inSize, String inBrand) {
         List<Color> colorIdList = colorList.stream().filter(color -> color.getColor().equalsIgnoreCase(inColor)).toList();
         int colorId = colorIdList.get(0).getId();
         List<Size> sizeIdList = sizeList.stream().filter(size -> size.getSize() == inSize).toList();
@@ -102,22 +102,22 @@ public class SalesApplication {
                     + " " + e.getAddress() + " " + e.getPostalCode() + " " + e.getCity()));
             options();
         }
-    }
+    }*/
 
     public void totalSalesamountPerCustomer() {
         Map<Integer, Integer> customerTotal = new HashMap<>();
 
         for (PlacedOrder placedOrder : placedOrderList) {
             for (OrderedItems orderedItems : orderedItemsList) {
-                if (orderedItems.getPlacedOrderId() == placedOrder.getId()) {
+                if (orderedItems.getPlacedOrder().getId() == placedOrder.getId()) {
                     Shoe shoe = shoeList.stream()
-                            .filter(s -> s.getId() == orderedItems.getShoeId())
+                            .filter(s -> s.getId() == orderedItems.getShoe().getId())
                             .findFirst()
                             .orElse(null);
 
                     if (shoe != null) {
                         Customer customer = customerList.stream()
-                                .filter(c -> c.getId() == placedOrder.getCustomerId())
+                                .filter(c -> c.getId() == placedOrder.getCustomer().getId())
                                 .findFirst()
                                 .orElse(null);
 
@@ -144,7 +144,7 @@ public class SalesApplication {
         Map<Integer, Integer> ordersCount = new HashMap<>();
 
         for (PlacedOrder placedOrder : placedOrderList) {
-            int customerId = placedOrder.getCustomerId();
+            int customerId = placedOrder.getCustomer().getId();
             int ordersAmount = ordersCount.getOrDefault(customerId, 0);
             ordersAmount++;
             ordersCount.put(customerId, ordersAmount);
@@ -161,10 +161,10 @@ public class SalesApplication {
         options();
     }
 
-    public void topFiveMostSoldShoes() {
+    /*public void topFiveMostSoldShoes() {
         Map<Integer, Integer> topBrandMap = shoeList.stream()
                 .filter(shoe -> orderedItemsList.stream()
-                        .anyMatch(orderedItem -> orderedItem.getShoeId() == shoe.getId()))
+                        .anyMatch(orderedItem -> orderedItem.getShoe().getId() == shoe.getId()))
                 .collect(Collectors.groupingBy(Shoe::getBrandId, Collectors.summingInt(i -> 1)));
 
         System.out.println(setTextYellow + "Topplista över mest sålda varumärken:" + turnOffTextYellow);
@@ -175,7 +175,7 @@ public class SalesApplication {
                         .filter(b -> b.getId() == e.getKey())
                         .findFirst().ifPresent(brand -> System.out.println(brand.getBrand() + ": " + e.getValue() + " st")));
         options();
-    }
+    }*/
 
 
     public static void main(String[] args) {

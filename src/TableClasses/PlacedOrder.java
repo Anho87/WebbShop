@@ -2,7 +2,7 @@ package TableClasses;
 
 public class PlacedOrder {
     private int id;
-    private int customerId;
+    private Customer customer;
     
     public PlacedOrder(){
         
@@ -10,9 +10,9 @@ public class PlacedOrder {
 
     
 
-    public PlacedOrder(int id, int customerId) {
+    public PlacedOrder(int id, Customer customer) {
         this.id = id;
-        this.customerId = customerId;
+        this.customer = customer;
     }
 
     public int getId() {
@@ -23,18 +23,18 @@ public class PlacedOrder {
         this.id = id;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     @Override
     public String toString() {
         return "PlacedOrder: " +
                 "Id: " + id +
-                " CustomerId: " + customerId;
+                " Customer: " + customer;
     }
 }

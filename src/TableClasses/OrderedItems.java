@@ -2,17 +2,17 @@ package TableClasses;
 
 public class OrderedItems {
     private int id;
-    private int placedOrderId;
-    private int shoeId;
+    private PlacedOrder placedOrder;
+    private Shoe shoe;
     
 
     public OrderedItems(){
         
     }
-    public OrderedItems(int id, int placedOrderId, int shoeId) {
+    public OrderedItems(int id, PlacedOrder placedOrder, Shoe shoe) {
         this.id = id;
-        this.placedOrderId = placedOrderId;
-        this.shoeId = shoeId;
+        this.placedOrder = placedOrder;
+        this.shoe = shoe;
     }
 
     public int getId() {
@@ -23,26 +23,27 @@ public class OrderedItems {
         this.id = id;
     }
 
-    public int getPlacedOrderId() {
-        return placedOrderId;
+    public PlacedOrder getPlacedOrder() {
+        return placedOrder;
     }
 
-    public void setPlacedOrderId(int placedOrderId) {
-        this.placedOrderId = placedOrderId;
+    public void setPlacedOrder(PlacedOrder placedOrder) {
+        this.placedOrder = placedOrder;
     }
 
-    public int getShoeId() {
-        return shoeId;
+    public Shoe getShoe() {
+        return shoe;
     }
 
-    public void setShoeId(int shoeId) {
-        this.shoeId = shoeId;
+    public void setShoe(Shoe shoe) {
+        this.shoe = shoe;
     }
+
     @Override
     public String toString() {
         return  "OrderedItems: " +
                 "Id: " + id +
-                " PlacedOrderId: " + placedOrderId +
-                " ShoeId: " + shoeId;
+                " PlacedOrderId: " + placedOrder +
+                " ShoeId: " + shoe;
     }
 }
