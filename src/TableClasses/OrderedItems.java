@@ -1,14 +1,10 @@
 package TableClasses;
 
 public class OrderedItems {
-    private int id;
-    private PlacedOrder placedOrder;
-    private Shoe shoe;
+    private final int id;
+    private final PlacedOrder placedOrder;
+    private final Shoe shoe;
     
-
-    public OrderedItems(){
-        
-    }
     public OrderedItems(int id, PlacedOrder placedOrder, Shoe shoe) {
         this.id = id;
         this.placedOrder = placedOrder;
@@ -18,25 +14,13 @@ public class OrderedItems {
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public PlacedOrder getPlacedOrder() {
         return placedOrder;
     }
 
-    public void setPlacedOrder(PlacedOrder placedOrder) {
-        this.placedOrder = placedOrder;
-    }
-
     public Shoe getShoe() {
         return shoe;
-    }
-
-    public void setShoe(Shoe shoe) {
-        this.shoe = shoe;
     }
 
     @Override

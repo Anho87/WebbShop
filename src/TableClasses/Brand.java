@@ -1,12 +1,10 @@
 package TableClasses;
 
 public class Brand {
-    private int id;
-    private String brand;
+    private final int id;
+    private final String brand;
 
-    public Brand(){
-        
-    }
+   
     public Brand(int id, String brand) {
         this.id = id;
         this.brand = brand;
@@ -16,17 +14,13 @@ public class Brand {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  
 
     public String getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
+  
 
     @Override
     public String toString() {

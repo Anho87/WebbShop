@@ -1,15 +1,9 @@
 package TableClasses;
 
 public class PlacedOrder {
-    private int id;
-    private Customer customer;
+    private final int id;
+    private final Customer customer;
     
-    public PlacedOrder(){
-        
-    }
-
-    
-
     public PlacedOrder(int id, Customer customer) {
         this.id = id;
         this.customer = customer;
@@ -18,19 +12,11 @@ public class PlacedOrder {
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public Customer getCustomer() {
         return customer;
     }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
+    
     @Override
     public String toString() {
         return "PlacedOrder: " +
