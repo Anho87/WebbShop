@@ -27,19 +27,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, firstname, Lastname, address, postalcode, city, emailaddress, password from Customer"
+                     "select id from Customer"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String firstName = rs.getString("firstname");
-                String lastName = rs.getString("lastname");
-                String address = rs.getString("address");
-                int postalCode = rs.getInt("postalcode");
-                String city = rs.getString("city");
-                String emailaddress = rs.getString("emailaddress");
-                String password = rs.getString("password");
-                Customer temp = new Customer(id, firstName, lastName, address, postalCode, city, emailaddress, password);
+                Customer temp = getCustomer(id);
                 customerList.add(temp);
             }
 
@@ -169,14 +162,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, customerid from PlacedOrder"
+                     "select id from PlacedOrder"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int customerId = rs.getInt("customerId");
-                Customer tempCustomer = getCustomer(customerId);
-                PlacedOrder temp = new PlacedOrder(id, tempCustomer);
+                PlacedOrder temp = getPlacedOrder(id);
                 placedOrderList.add(temp);
             }
 
@@ -201,20 +192,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, brandId, colorId, sizeId, price, stock from Shoe"
+                     "select id from Shoe"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int brandId = rs.getInt("brandId");
-                int colorId = rs.getInt("colorId");
-                int sizeId = rs.getInt("sizeId");
-                int price = rs.getInt("price");
-                int stock = rs.getInt("stock");
-                Brand tempBrand = getBrand(brandId);
-                Color tempColor = getColor(colorId);
-                Size tempSize = getSize(sizeId);
-                Shoe temp = new Shoe(id, tempBrand, tempColor, tempSize, price, stock);
+                Shoe temp = getShoe(id);
                 shoeList.add(temp);
             }
 
@@ -331,13 +314,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, size from Size"
+                     "select id from Size"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int size = rs.getInt("size");
-                Size temp = new Size(id, size);
+                Size temp = getSize(id);
                 sizeList.add(temp);
             }
 
@@ -431,13 +413,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, brand from Brand"
+                     "select id from Brand"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String brand = rs.getString("brand");
-                Brand temp = new Brand(id, brand);
+                Brand temp = getBrand(id);
                 brandList.add(temp);
             }
 
@@ -529,13 +510,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, categoryName from CategoryName"
+                     "select id from CategoryName"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String categoryName = rs.getString("categoryName");
-                CategoryName temp = new CategoryName(id, categoryName);
+                CategoryName temp = getCategoryName(id);
                 categoryNameList.add(temp);
             }
 
@@ -560,13 +540,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, color from Color"
+                     "select id from Color"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String color = rs.getString("color");
-                Color temp = new Color(id, color);
+                Color temp = getColor(id);
                 colorList.add(temp);
             }
 

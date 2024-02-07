@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class SalesApplication {
-   private Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
     private List<Customer> customerList;
     private List<OrderedItems> orderedItemsList;
     private List<PlacedOrder> placedOrderList;
@@ -38,13 +37,13 @@ public class SalesApplication {
 
     public SalesApplication() {
         getAllData();
-        brandList.forEach(brand -> System.out.println(brand.getBrand()));
         options();
     }
-    public void options(){
+
+    public void options() {
         System.out.println(setTextYellow + "Vilken rapport vill du se?" + turnOffTextYellow);
-        System.out.println("1. Specifika produkter\n2. Antal ordrar/kund\n3. Totala Beställningsvärdet/kund" +
-                "\n4. Top 5 mest sålda produkterna\n5 Avsluta");
+        System.out.println("1. Specifika produkter\n2. Antal ordrar/Kund\n3. Totala Beställningsvärdet/Kund" +
+                "\n4. Totala Beställningsvärdet/Stad\n5. Antal ordrar/Sko\n6. Avsluta");
         String choice = sc.nextLine();
 
         switch (choice) {
@@ -61,11 +60,15 @@ public class SalesApplication {
                 break;
 
             case "4":
-                //topFiveMostSoldShoes();
+                totalSalesAmountPerCity();
                 break;
 
             case "5":
-                System.exit(0);
+                totalSalesAmountPerShoe();
+                break;
+                
+            case "6":
+                System.exit(0);    
         }
     }
 
@@ -106,8 +109,8 @@ public class SalesApplication {
                         + " " + e.getAddress() + " " + e.getPostalCode() + " " + e.getCity()));
                 options();
             }
-        }else {
-            System.out.println("Ingen matchande skor hittades");
+        } else {
+            System.out.println("Inga matchande skor hittades");
             options();
         }
     }
@@ -143,7 +146,7 @@ public class SalesApplication {
         customerTotal.forEach((customerId, totalAmount) -> customerList.stream()
                 .filter(c -> c.getId() == customerId)
                 .findFirst().ifPresent(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()
-                        + ": Total summa - " + totalAmount)));
+                        + ": Totala summan - " + totalAmount + "kr")));
         options();
 
     }
@@ -163,9 +166,64 @@ public class SalesApplication {
             customerList.stream()
                     .filter(c -> c.getId() == customerId)
                     .findFirst().ifPresent(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()
-                            + ": Total Orders - " + ordersAmount));
+                            + ": Ordrar - " + ordersAmount));
 
         });
+        options();
+    }
+
+    public void totalSalesAmountPerCity() {
+        Map<String, Integer> cityTotal = new HashMap<>();
+
+        for (PlacedOrder placedOrder : placedOrderList) {
+            for (OrderedItems orderedItems : orderedItemsList) {
+                if (orderedItems.getPlacedOrder().getId() == placedOrder.getId()) {
+                    Shoe shoe = shoeList.stream()
+                            .filter(s -> s.getId() == orderedItems.getShoe().getId())
+                            .findFirst()
+                            .orElse(null);
+
+                    if (shoe != null) {
+                        Customer customer = customerList.stream()
+                                .filter(c -> c.getCity().equalsIgnoreCase(placedOrder.getCustomer().getCity()))
+                                .findFirst()
+                                .orElse(null);
+
+                        if (customer != null) {
+                            int orderTotal = cityTotal.getOrDefault(customer.getCity(), 0);
+                            orderTotal += shoe.getPrice();
+                            cityTotal.put(customer.getCity(), orderTotal);
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println(setTextYellow + "Stads rapport: Totala beställningsvärde" + turnOffTextYellow);
+        cityTotal.forEach((city, totalAmount) -> customerList.stream()
+                .filter(c -> c.getCity().equalsIgnoreCase(city))
+                .findFirst().ifPresent(customer -> System.out.println(customer.getCity()
+                        + ": Totala summan - " + totalAmount)));
+        options();
+    }
+
+    public void totalSalesAmountPerShoe() {
+        Map<Brand, Long> ordersCount = new HashMap<>();
+        
+        for (Brand brand : brandList) {
+            int brandId = brand.getId();
+            long ordersAmount =  orderedItemsList.stream()
+                    .filter(orderedItems -> orderedItems.getShoe().getBrand().getId() == brandId)
+                    .count();
+            ordersCount.put(brand, ordersAmount);
+        }
+        
+        System.out.println(setTextYellow + "Märkesrapport: Antal ordrar" + turnOffTextYellow);
+        ordersCount.forEach((brand, ordersAmount) -> {
+            System.out.println(brand.getBrand() + ": " + ordersAmount + "st");
+
+        });
+
         options();
     }
 
