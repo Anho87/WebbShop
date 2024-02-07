@@ -66,9 +66,9 @@ public class SalesApplication {
             case "5":
                 totalSalesAmountPerShoe();
                 break;
-                
+
             case "6":
-                System.exit(0);    
+                System.exit(0);
         }
     }
 
@@ -152,23 +152,50 @@ public class SalesApplication {
     }
 
     public void ordersPerCustomer() {
-        Map<Integer, Integer> ordersCount = new HashMap<>();
+       Map<Integer, Integer> ordersCounts = new HashMap<>();
 
         for (PlacedOrder placedOrder : placedOrderList) {
             int customerId = placedOrder.getCustomer().getId();
-            int ordersAmount = ordersCount.getOrDefault(customerId, 0);
+            int ordersAmount = ordersCounts.getOrDefault(customerId, 0);
             ordersAmount++;
-            ordersCount.put(customerId, ordersAmount);
+            ordersCounts.put(customerId, ordersAmount);
         }
 
         System.out.println(setTextYellow + "Kundrapport: Antal ordrar" + turnOffTextYellow);
-        ordersCount.forEach((customerId, ordersAmount) -> {
+        ordersCounts.forEach((customerId, ordersAmount) -> {
             customerList.stream()
                     .filter(c -> c.getId() == customerId)
                     .findFirst().ifPresent(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()
                             + ": Ordrar - " + ordersAmount));
 
         });
+        System.out.println();
+        Map<Customer, Long> ordersCount = new HashMap<>();
+
+        for (Customer customer : customerList) {
+            int customerId = customer.getId();
+            long ordersAmount = placedOrderList.stream()
+                    .filter(placedOrder -> placedOrder.getCustomer().getId() == customerId)
+                    .count();
+            ordersCount.put(customer, ordersAmount);
+        }
+
+        System.out.println(setTextYellow + "Kundrapport: Antal ordrar" + turnOffTextYellow);
+        ordersCount.forEach((customer, ordersAmount) -> {
+            System.out.println(customer.getFirstName() + " " + customer.getLastName()
+                    + ": Ordrar - " + ordersAmount);
+
+        });
+        System.out.println();
+        for (Customer c: customerList) {
+            List<PlacedOrder> orderCount = placedOrderList.stream()
+                    .filter(placedOrder -> customerList.stream()
+                            .anyMatch(customer -> c.getId() == placedOrder.getCustomer().getId()))
+                    .toList();
+            System.out.println(c.getFirstName() + " Antal ordrar: " + orderCount.size());
+        }
+
+
         options();
     }
 
@@ -209,15 +236,15 @@ public class SalesApplication {
 
     public void totalSalesAmountPerShoe() {
         Map<Brand, Long> ordersCount = new HashMap<>();
-        
+
         for (Brand brand : brandList) {
             int brandId = brand.getId();
-            long ordersAmount =  orderedItemsList.stream()
+            long ordersAmount = orderedItemsList.stream()
                     .filter(orderedItems -> orderedItems.getShoe().getBrand().getId() == brandId)
                     .count();
             ordersCount.put(brand, ordersAmount);
         }
-        
+
         System.out.println(setTextYellow + "Märkesrapport: Antal ordrar" + turnOffTextYellow);
         ordersCount.forEach((brand, ordersAmount) -> {
             System.out.println(brand.getBrand() + ": " + ordersAmount + "st");
@@ -226,24 +253,7 @@ public class SalesApplication {
 
         options();
     }
-
-    /*public void topFiveMostSoldShoes() {
-        Map<Integer, Integer> topBrandMap = shoeList.stream()
-                .filter(shoe -> orderedItemsList.stream()
-                        .anyMatch(orderedItem -> orderedItem.getShoe().getId() == shoe.getId()))
-                .collect(Collectors.groupingBy(Shoe::getBrandId, Collectors.summingInt(i -> 1)));
-
-        System.out.println(setTextYellow + "Topplista över mest sålda varumärken:" + turnOffTextYellow);
-        topBrandMap.entrySet().stream()
-                .sorted((x, y) -> y.getValue().compareTo(x.getValue()))
-                .limit(5)
-                .forEach(e -> brandList.stream()
-                        .filter(b -> b.getId() == e.getKey())
-                        .findFirst().ifPresent(brand -> System.out.println(brand.getBrand() + ": " + e.getValue() + " st")));
-        options();
-    }*/
-
-
+    
     public static void main(String[] args) {
         new SalesApplication();
     }
