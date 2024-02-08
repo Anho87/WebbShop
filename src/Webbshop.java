@@ -254,8 +254,8 @@ public class Webbshop {
     }
     
     public void searchShoe(String wordToSearchFor, ShoeSearchInfo ssi){
-        shoeList.stream().filter(shoe -> ssi.search(shoe,wordToSearchFor))
-                .forEach(shoe -> System.out.println(shoe.getBrand().getBrand() + " " + shoe.getColor().getColor() + " " + shoe.getSize().getSize() + " " + shoe.getPrice() + "kr" + shoe.getStock()));
+        shoeList.stream().filter(shoe -> ssi.search(shoe,wordToSearchFor) && shoe.getStock() > 0)
+                .forEach(shoe -> System.out.println(shoe.getBrand().getBrand() + " " + shoe.getColor().getColor() + " " + shoe.getSize().getSize() + " " + shoe.getPrice() + "kr saldo:" + shoe.getStock()));
     }
 }
     
