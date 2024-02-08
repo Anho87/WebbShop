@@ -1,10 +1,8 @@
 import Repository.Repository;
 import TableClasses.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SalesApplication {
     private Scanner sc = new Scanner(System.in);
@@ -152,7 +150,7 @@ public class SalesApplication {
     }
 
     public void ordersPerCustomer() {
-       Map<Integer, Integer> ordersCounts = new HashMap<>();
+/*       Map<Integer, Integer> ordersCounts = new HashMap<>();
 
         for (PlacedOrder placedOrder : placedOrderList) {
             int customerId = placedOrder.getCustomer().getId();
@@ -168,7 +166,7 @@ public class SalesApplication {
                     .findFirst().ifPresent(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()
                             + ": Ordrar - " + ordersAmount));
 
-        });
+        });*/
         System.out.println();
         Map<Customer, Long> ordersCount = new HashMap<>();
 
@@ -187,13 +185,13 @@ public class SalesApplication {
 
         });
         System.out.println();
-        for (Customer c: customerList) {
+       /* for (Customer c: customerList) {
             List<PlacedOrder> orderCount = placedOrderList.stream()
                     .filter(placedOrder -> customerList.stream()
                             .anyMatch(customer -> c.getId() == placedOrder.getCustomer().getId()))
                     .toList();
             System.out.println(c.getFirstName() + " Antal ordrar: " + orderCount.size());
-        }
+        }*/
 
 
         options();
@@ -245,8 +243,18 @@ public class SalesApplication {
             ordersCount.put(brand, ordersAmount);
         }
 
+        LinkedHashMap<Brand, Long> sortedMap = ordersCount.entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
         System.out.println(setTextYellow + "Märkesrapport: Antal ordrar" + turnOffTextYellow);
-        ordersCount.forEach((brand, ordersAmount) -> {
+        sortedMap.forEach((brand, ordersAmount) -> {
             System.out.println(brand.getBrand() + ": " + ordersAmount + "st");
 
         });

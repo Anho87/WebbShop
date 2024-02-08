@@ -21,7 +21,10 @@ public class Webbshop {
     private Customer currentCustomer;
     private int productId;
     private int orderId;
-
+    
+    ShoeSearchInfo colorSearch = (shoe, search) -> shoe.getColor().getColor().equalsIgnoreCase(search);
+    ShoeSearchInfo brandSearch = (shoe, search) -> shoe.getBrand().getBrand().toLowerCase().contains(search);
+            
     public static void main(String[] args) {
         new Webbshop();
     }
@@ -45,8 +48,7 @@ public class Webbshop {
         categoryNameList = r.getCategoryNameData();
         colorList = r.getColorData();
     }
-
-
+    
     public void login() {
         String userName;
         String password;
@@ -59,15 +61,16 @@ public class Webbshop {
             if (c.getEmailAddress().equalsIgnoreCase(userName) && c.getPassword().equalsIgnoreCase(password)) {
                 currentCustomer = c;
                 System.out.println("Välkommen " + currentCustomer.getFirstName());
-                orders();
+                options();
             }
         }
     }
 
-    public void orders() {
+    public void options() {
         System.out.println("Vill du lägga till produkter till en befintlig order eller skapa en ny?");
-        System.out.println("1. Skapa en ny order.\n2. Lägg till i en befintlig order.\n3. Se gamla ordrar.\n4. Logga ut.");
+        System.out.println("1. Skapa en ny order.\n2. Lägg till i en befintlig order.\n3. Se gamla ordrar.\n4. Titta på utbudet.\n5. Logga ut.");
         int a = sc.nextInt();
+        sc.nextLine();
         switch (a){
             case 1:
                 orderId = 0;
@@ -79,7 +82,7 @@ public class Webbshop {
                 System.out.println("Tryck 'b' för att gå tillbaka.");
                 String userChoise = sc.next();
                 if(userChoise.equalsIgnoreCase("b")){
-                    orders();
+                    options();
                 }else{
                     orderId = Integer.parseInt(userChoise);
                     showCategories();   
@@ -89,9 +92,30 @@ public class Webbshop {
                 viewOldOrders();
                 break;
             case 4:
+                viewShoes();
+                break;
+            case 5:
                 System.out.println("Du loggades ut!");
                 System.exit(0);
                 break;
+        }
+    }
+    
+    public void viewShoes(){
+        while (true){
+            System.out.println("Vill du söka på färg eller märke,(skriv b för att gå tillbaka)?");
+            String attribute = sc.nextLine();
+            if(attribute.equalsIgnoreCase("b")){
+                options();
+            }else {
+                System.out.println("Vilket ord vill du söka på?");
+                String searchWord = sc.nextLine();
+                if (attribute.equalsIgnoreCase("färg")) {
+                    searchShoe(searchWord, colorSearch);
+                } else if (attribute.equalsIgnoreCase("märke")) {
+                    searchShoe(searchWord, brandSearch);
+                }
+            }
         }
     }
     
@@ -102,7 +126,7 @@ public class Webbshop {
         for (Shoe shoe : shoeList) {
             for (OrderedItems orderedItem : orderedItemsList) {
                 if (orderedItem.getShoe().getId() == shoe.getId() && orderedItem.getPlacedOrder().getId() == orderId) {
-                    printShoeInfo(shoe);
+                    printShoeInfo(shoe.getId());
                     System.out.println();
                 }
             }
@@ -112,7 +136,7 @@ public class Webbshop {
         while(true){
             back = sc.nextLine();
             if(back.equalsIgnoreCase("b")){
-                orders();
+                options();
             }
         }
     }
@@ -125,7 +149,7 @@ public class Webbshop {
         System.out.println("Tryck 'b' för att gå tillbaka.");
         String chosenCategory = sc.next();
         if(chosenCategory.equalsIgnoreCase("b")){
-            orders();
+            options();
         }else{
             try{
                 int chosenCategoryId = categoryNameList.get(Integer.parseInt(chosenCategory) - 1).getId();
@@ -213,16 +237,8 @@ public class Webbshop {
     
     public void addToOrder(){
         r.addToCart(currentCustomer.getId(),orderId,productId);
-        brandList.stream().filter(brand -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getBrand().getId() == brand.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getBrand() + " "));
-        
-        colorList.stream().filter(color -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getColor().getId() == color.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getColor() + " "));
-       
-        sizeList.stream().filter(size -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getSize().getId() == size.getId() && shoe.getId() == productId)).forEach(e-> System.out.print(e.getSize() + " "));
-        
-        shoeList.stream().filter(shoe -> shoe.getId() == productId).forEach(e -> System.out.print(e.getPrice() + "kr lades till i din order!"));
+        printShoeInfo(productId);
+        System.out.print(" lades till i din order!");
         System.out.println();
         getAllData();
         List<PlacedOrder> orderList = placedOrderList.stream()
@@ -231,14 +247,15 @@ public class Webbshop {
         showCategories();
     }
     
-    public void printShoeInfo(Shoe shoeId){
-        brandList.stream().filter(brand -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getBrand().getId() == brand.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getBrand() + " "));
-        colorList.stream().filter(color -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getColor().getId() == color.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getColor() + " "));
-        sizeList.stream().filter(size -> shoeList.stream()
-                .anyMatch(shoe -> shoe.getSize().getId() == size.getId() && shoe.getId() == shoeId.getId())).forEach(e-> System.out.print(e.getSize() + " "));
-        shoeList.stream().filter(shoe -> shoe.getId() == shoeId.getId()).forEach(e -> System.out.print(e.getPrice() + "kr"));
+    public void printShoeInfo(int shoeId){
+        shoeList.stream().filter(shoe -> shoe.getId() == shoeId)
+                .forEach(shoe -> 
+                        System.out.print(shoe.getBrand().getBrand() + " " + shoe.getColor().getColor() + " " + shoe.getSize().getSize() + " " + shoe.getPrice() + "kr"));
+    }
+    
+    public void searchShoe(String wordToSearchFor, ShoeSearchInfo ssi){
+        shoeList.stream().filter(shoe -> ssi.search(shoe,wordToSearchFor))
+                .forEach(shoe -> System.out.println(shoe.getBrand().getBrand() + " " + shoe.getColor().getColor() + " " + shoe.getSize().getSize() + " " + shoe.getPrice() + "kr" + shoe.getStock()));
     }
 }
     
