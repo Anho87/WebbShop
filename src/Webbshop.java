@@ -241,10 +241,15 @@ public class Webbshop {
         System.out.print(" lades till i din order!");
         System.out.println();
         getAllData();
-        List<PlacedOrder> orderList = placedOrderList.stream()
-                .filter(e -> e.getCustomer().getId() == currentCustomer.getId()).toList();
-        orderId = orderList.get(orderList.size()-1).getId();
-        showCategories();
+        if (orderId == 0){
+            List<PlacedOrder> orderList = placedOrderList.stream()
+                    .filter(e -> e.getCustomer().getId() == currentCustomer.getId()).toList();
+            orderId = orderList.get(orderList.size()-1).getId();
+            showCategories();  
+        }else {
+            showCategories();
+        }
+        
     }
     
     public void printShoeInfo(int shoeId){
