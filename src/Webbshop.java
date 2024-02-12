@@ -167,7 +167,13 @@ public class Webbshop {
                         .anyMatch(category -> category.getBrand().getId() == brand.getId() && category.getCategoryName().getId() == chosenCategoryId))
                 .toList();
         for (int i = 1; i < chosenBrand.size() + 1; i++) {
-            System.out.println(i + ": " + chosenBrand.get(i - 1).getBrand());
+            int shoeId = chosenBrand.get(i - 1).getId();
+            System.out.print(i + ": " + chosenBrand.get(i - 1).getBrand() + " ");
+            shoeList.stream()
+                    .filter(shoe -> shoe.getBrand().getId() == shoeId)
+                    .map(Shoe::getPrice)
+                    .distinct()
+                    .forEach(price -> System.out.println(price + "kr"));
         }
         System.out.println("Tryck 'b' för att gå tillbaka.");
         String userChoise = sc.next();
