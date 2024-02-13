@@ -150,24 +150,6 @@ public class SalesApplication {
     }
 
     public void ordersPerCustomer() {
-/*       Map<Integer, Integer> ordersCounts = new HashMap<>();
-
-        for (PlacedOrder placedOrder : placedOrderList) {
-            int customerId = placedOrder.getCustomer().getId();
-            int ordersAmount = ordersCounts.getOrDefault(customerId, 0);
-            ordersAmount++;
-            ordersCounts.put(customerId, ordersAmount);
-        }
-
-        System.out.println(setTextYellow + "Kundrapport: Antal ordrar" + turnOffTextYellow);
-        ordersCounts.forEach((customerId, ordersAmount) -> {
-            customerList.stream()
-                    .filter(c -> c.getId() == customerId)
-                    .findFirst().ifPresent(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()
-                            + ": Ordrar - " + ordersAmount));
-
-        });*/
-        System.out.println();
         Map<Customer, Long> ordersCount = new HashMap<>();
 
         for (Customer customer : customerList) {
@@ -185,15 +167,6 @@ public class SalesApplication {
 
         });
         System.out.println();
-       /* for (Customer c: customerList) {
-            List<PlacedOrder> orderCount = placedOrderList.stream()
-                    .filter(placedOrder -> customerList.stream()
-                            .anyMatch(customer -> c.getId() == placedOrder.getCustomer().getId()))
-                    .toList();
-            System.out.println(c.getFirstName() + " Antal ordrar: " + orderCount.size());
-        }*/
-
-
         options();
     }
 
