@@ -27,19 +27,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, firstname, Lastname, address, postalcode, city, emailaddress, password from Customer"
+                     "select id from Customer"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String firstName = rs.getString("firstname");
-                String lastName = rs.getString("lastname");
-                String address = rs.getString("address");
-                int postalCode = rs.getInt("postalcode");
-                String city = rs.getString("city");
-                String emailaddress = rs.getString("emailaddress");
-                String password = rs.getString("password");
-                Customer temp = new Customer(id, firstName, lastName, address, postalCode, city, emailaddress, password);
+                Customer temp = getCustomer(id);
                 customerList.add(temp);
             }
 
@@ -71,7 +64,9 @@ public class Repository {
                 int id = rs.getInt("id");
                 int placedOrderId = rs.getInt("placedOrderId");
                 int shoeId = rs.getInt("shoeId");
-                OrderedItems temp = new OrderedItems(id, placedOrderId, shoeId);
+                PlacedOrder tempPlacedOrder = getPlacedOrder(placedOrderId);
+                Shoe tempShoe = getShoe(shoeId);
+                OrderedItems temp = new OrderedItems(id, tempPlacedOrder, tempShoe);
                 orderedItemsList.add(temp);
             }
 
@@ -79,6 +74,77 @@ public class Repository {
             e.printStackTrace();
         }
         return orderedItemsList;
+    }
+    
+    public Shoe getShoe (int inShoeId){
+        Shoe temp = null;
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+            PreparedStatement stmt = c.prepareStatement(
+                    "select id, brandId, colorId, sizeId, price, stock from Shoe where shoe.id = ?"
+            )
+        ) {
+            stmt.setInt(1,inShoeId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int brandId = rs.getInt("brandId");
+                int colorId = rs.getInt("colorId");
+                int sizeId = rs.getInt("sizeId");
+                int price = rs.getInt("price");
+                int stock = rs.getInt("stock");
+                Brand tempBrand = getBrand(brandId);
+                Color tempColor = getColor(colorId);
+                Size tempSize = getSize(sizeId);
+                temp = new Shoe(id, tempBrand, tempColor, tempSize, price, stock);
+                return temp;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+    public PlacedOrder getPlacedOrder(int inPlacedOrderId){
+        PlacedOrder temp = null;
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             PreparedStatement stmt = c.prepareStatement(
+                     "select id, customerid from PlacedOrder where placedorder.id = ?"
+             )
+        ) {
+            stmt.setInt(1,inPlacedOrderId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int customerId = rs.getInt("customerId");
+                Customer tempCustomer = getCustomer(customerId);
+                temp = new PlacedOrder(id, tempCustomer);
+                return temp;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return temp;
     }
 
     public List<PlacedOrder> getPlacedOrderData() {
@@ -96,13 +162,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, customerid from PlacedOrder"
+                     "select id from PlacedOrder"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int customerId = rs.getInt("customerId");
-                PlacedOrder temp = new PlacedOrder(id, customerId);
+                PlacedOrder temp = getPlacedOrder(id);
                 placedOrderList.add(temp);
             }
 
@@ -127,17 +192,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, brandId, colorId, sizeId, price, stock from Shoe"
+                     "select id from Shoe"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int brandId = rs.getInt("brandId");
-                int colorId = rs.getInt("colorId");
-                int sizeId = rs.getInt("sizeId");
-                int price = rs.getInt("price");
-                int stock = rs.getInt("stock");
-                Shoe temp = new Shoe(id, brandId, colorId, sizeId, price, stock);
+                Shoe temp = getShoe(id);
                 shoeList.add(temp);
             }
 
@@ -147,6 +207,98 @@ public class Repository {
         return shoeList;
     }
 
+    public Size getSize(int inSizeId){
+        Size temp = null;
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             PreparedStatement stmt = c.prepareStatement(
+                     "select id, size from Size where size.id = ?"
+             )
+        ) {
+            stmt.setInt(1,inSizeId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                int size = rs.getInt("size");
+                temp = new Size(id, size);
+                return temp;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    public Color getColor(int inColorId){
+        Color temp = null;
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             PreparedStatement stmt = c.prepareStatement(
+                     "select id, color from Color where color.id = ?"
+             )
+        ) {
+            stmt.setInt(1,inColorId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String color = rs.getString("color");
+                temp = new Color(id, color);
+                return temp;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+    
+    public Brand getBrand(int inBrandId){
+        Brand temp = null;
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             PreparedStatement stmt = c.prepareStatement(
+                     "select id, brand from Brand where brand.id = ?"
+             )
+        ) {
+            stmt.setInt(1,inBrandId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String brand = rs.getString("brand");
+                temp = new Brand(id, brand);
+                return temp;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
     public List<Size> getSizeData() {
         List<Size> sizeList = new ArrayList<>();
         try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
@@ -162,13 +314,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, size from Size"
+                     "select id from Size"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int size = rs.getInt("size");
-                Size temp = new Size(id, size);
+                Size temp = getSize(id);
                 sizeList.add(temp);
             }
 
@@ -178,6 +329,42 @@ public class Repository {
         return sizeList;
     }
 
+    public Customer getCustomer(int inCustomerId){
+        Customer temp = null;
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+             
+             PreparedStatement stmt = c.prepareStatement(
+                     "select id, firstname, Lastname, address, postalcode, city, emailaddress, password from Customer where customer.id = ?"
+             )
+        ) {
+            stmt.setInt(1,inCustomerId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String firstName = rs.getString("firstname");
+                String lastName = rs.getString("lastname");
+                String address = rs.getString("address");
+                int postalCode = rs.getInt("postalcode");
+                String city = rs.getString("city");
+                String emailaddress = rs.getString("emailaddress");
+                String password = rs.getString("password");
+                temp = new Customer(id, firstName, lastName, address, postalCode, city, emailaddress, password);
+                return temp;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
     public List<TelephoneNumber> getTelephoneNumberData() {
         List<TelephoneNumber> telephoneNumberList = new ArrayList<>();
         try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
@@ -200,7 +387,8 @@ public class Repository {
                 int id = rs.getInt("id");
                 int customerId = rs.getInt("customerId");
                 String telephoneNumber = rs.getString("telephoneNumber");
-                TelephoneNumber temp = new TelephoneNumber(id, customerId, telephoneNumber);
+                Customer tempCustomer = getCustomer(customerId);
+                TelephoneNumber temp = new TelephoneNumber(id, tempCustomer, telephoneNumber);
                 telephoneNumberList.add(temp);
             }
 
@@ -225,13 +413,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, brand from Brand"
+                     "select id from Brand"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String brand = rs.getString("brand");
-                Brand temp = new Brand(id, brand);
+                Brand temp = getBrand(id);
                 brandList.add(temp);
             }
 
@@ -263,7 +450,9 @@ public class Repository {
                 int id = rs.getInt("id");
                 int brandId = rs.getInt("brandId");
                 int categoryNameId = rs.getInt("categoryNameId");
-                Category temp = new Category(id, brandId, categoryNameId);
+                Brand tempBrand = getBrand(brandId);
+                CategoryName tempCategoryName = getCategoryName(categoryNameId);
+                Category temp = new Category(id, tempBrand, tempCategoryName);
                 categoryList.add(temp);
             }
 
@@ -271,6 +460,39 @@ public class Repository {
             e.printStackTrace();
         }
         return categoryList;
+    }
+    
+    public CategoryName getCategoryName(int inCategoryNameId){
+        CategoryName temp = null;
+        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
+            p.load(fileInput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             PreparedStatement stmt = c.prepareStatement(
+                     "select id, categoryName from CategoryName where categoryname.id = ?"
+             )
+        ){
+            stmt.setInt(1,inCategoryNameId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String categoryName = rs.getString("categoryName");
+                temp = new CategoryName(id,categoryName);
+                return temp;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return temp;
     }
 
     public List<CategoryName> getCategoryNameData() {
@@ -288,13 +510,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, categoryName from CategoryName"
+                     "select id from CategoryName"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String categoryName = rs.getString("categoryName");
-                CategoryName temp = new CategoryName(id, categoryName);
+                CategoryName temp = getCategoryName(id);
                 categoryNameList.add(temp);
             }
 
@@ -319,13 +540,12 @@ public class Repository {
 
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(
-                     "select id, color from Color"
+                     "select id from Color"
              )
         ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String color = rs.getString("color");
-                Color temp = new Color(id, color);
+                Color temp = getColor(id);
                 colorList.add(temp);
             }
 
@@ -335,7 +555,7 @@ public class Repository {
         return colorList;
     }
 
-    public void addToCard(int customerNumber, int orderNumber, int product) {
+    public void addToCart(int customerNumber, int orderNumber, int product) {
         try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
             p.load(fileInput);
         } catch (IOException e) {
@@ -358,43 +578,5 @@ public class Repository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public List<String> orderInfo(int orderNumber) {
-        List<String> productInfo = new ArrayList<>();
-        try (FileInputStream fileInput = new FileInputStream("src/settings.properties")) {
-            p.load(fileInput);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (Connection c = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-
-             PreparedStatement stmt = c.prepareStatement(
-                     "select brand.brand, color.color, size.size, shoe.price from brand\n" +
-                             "inner join shoe on shoe.brandid = brand.id\n" +
-                             "inner join size on shoe.sizeid = size.id\n" +
-                             "inner join color on color.id = shoe.colorid\n" +
-                             "inner join ordereditems on ordereditems.shoeid = shoe.id\n" +
-                             "where ordereditems.placedorderid = ?"
-             )
-        ) {
-            stmt.setInt(1, orderNumber);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()){
-                String brand = rs.getString("brand.brand");
-                String color = rs.getString("color.color");
-                int size = rs.getInt("size.size");
-                int price = rs.getInt("shoe.price");
-                String temp = brand + " " + color + " " + size + " " + price + "kr";
-                productInfo.add(temp);  
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return productInfo;
     }
 }

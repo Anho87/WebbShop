@@ -1,49 +1,34 @@
 package TableClasses;
 
 public class TelephoneNumber {
-    private int id;
-    private int customerId;
-    private String telephoneNumber;
+    private final int id;
+    private final Customer customer;
+    private final String telephoneNumber;
     
-    public TelephoneNumber(){
-        
-    }
 
-    public TelephoneNumber(int id, int customerId, String telephoneNumber) {
+    public TelephoneNumber(int id, Customer customer, String telephoneNumber) {
         this.id = id;
-        this.customerId = customerId;
+        this.customer = customer;
         this.telephoneNumber = telephoneNumber;
     }
 
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    
+    public Customer getCustomer() {
+        return customer;
     }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
     public String getTelephoneNumber() {
         return telephoneNumber;
     }
-
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
+    
 
     @Override
     public String toString() {
-        return "TelephoneNumber: " +
+        return "TelephoneNumber " +
                 "Id: " + id +
-                " CustomerId: " + customerId +
+                " Customer: " + customer +
                 " TelephoneNumber: " + telephoneNumber;
     }
 }

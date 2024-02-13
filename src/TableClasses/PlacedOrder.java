@@ -1,40 +1,26 @@
 package TableClasses;
 
 public class PlacedOrder {
-    private int id;
-    private int customerId;
+    private final int id;
+    private final Customer customer;
     
-    public PlacedOrder(){
-        
-    }
-
-    
-
-    public PlacedOrder(int id, int customerId) {
+    public PlacedOrder(int id, Customer customer) {
         this.id = id;
-        this.customerId = customerId;
+        this.customer = customer;
     }
 
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    
+    public Customer getCustomer() {
+        return customer;
     }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
+    
     @Override
     public String toString() {
         return "PlacedOrder: " +
                 "Id: " + id +
-                " CustomerId: " + customerId;
+                " Customer: " + customer;
     }
 }

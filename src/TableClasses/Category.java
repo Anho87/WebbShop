@@ -1,48 +1,31 @@
 package TableClasses;
 
 public class Category {
-    private int id;
-    private int brandId;
-    private int categoryNameId;
-
-    public Category(){
-        
-    }
-    public Category(int id, int brandId, int categoryNameId) {
+    private final int id;
+    private final Brand brand;
+    private final CategoryName categoryName;
+    
+    public Category(int id, Brand brand, CategoryName categoryName) {
         this.id = id;
-        this.brandId = brandId;
-        this.categoryNameId = categoryNameId;
+        this.brand = brand;
+        this.categoryName = categoryName;
     }
 
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    public Brand getBrand() {
+        return brand;
     }
-
-    public int getBrandId() {
-        return brandId;
-    }
-
-    public void setBrandId(int brandId) {
-        this.brandId = brandId;
-    }
-
-    public int getCategoryNameId() {
-        return categoryNameId;
-    }
-
-    public void setCategoryNameId(int categoryNameId) {
-        this.categoryNameId = categoryNameId;
+    public CategoryName getCategoryName() {
+        return categoryName;
     }
 
     @Override
     public String toString() {
         return "Category: " +
                 "Id: " + id +
-                " BrandId: " + brandId +
-                " CategoryNameId: " + categoryNameId;
+                " BrandId: " + brand.getBrand() +
+                " CategoryNameId: " + categoryName.getCategoryName();
     }
 }

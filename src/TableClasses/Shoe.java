@@ -1,21 +1,18 @@
 package TableClasses;
 
 public class Shoe {
-    private int id;
-    private int brandId;
-    private int colorId;
-    private int sizeId;
-    private int price;
-    private int stock;
+    private final int id;
+    private final Brand brand;
+    private final Color color;
+    private final Size size;
+    private final int price;
+    private final int stock;
     
-    public Shoe(){
-        
-    }
-    public Shoe(int id, int brandId, int colorId, int sizeId, int price, int stock) {
+    public Shoe(int id, Brand brand, Color colo, Size size, int price, int stock) {
         this.id = id;
-        this.brandId = brandId;
-        this.colorId = colorId;
-        this.sizeId = sizeId;
+        this.brand = brand;
+        this.color = colo;
+        this.size = size;
         this.price = price;
         this.stock = stock;
     }
@@ -23,58 +20,34 @@ public class Shoe {
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    
+    public Brand getBrand() {
+        return brand;
     }
 
-    public int getBrandId() {
-        return brandId;
+    public Color getColor() {
+        return color;
     }
 
-    public void setBrandId(int brandId) {
-        this.brandId = brandId;
-    }
-
-    public int getColorId() {
-        return colorId;
-    }
-
-    public void setColorId(int colorId) {
-        this.colorId = colorId;
-    }
-
-    public int getSizeId() {
-        return sizeId;
-    }
-
-    public void setSizeId(int sizeId) {
-        this.sizeId = sizeId;
+    public Size getSize() {
+        return size;
     }
 
     public int getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     public int getStock() {
         return stock;
     }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
+    
     @Override
     public String toString() {
         return "Shoe: " +
                 "Id: " + id +
-                " BrandId: " + brandId +
-                " ColorId: " + colorId +
-                " SizeId: " + sizeId +
+                " BrandId: " + brand.getBrand() +
+                " ColorId: " + color.getColor() +
+                " SizeId: " + size.getSize() +
                 " Price: " + price +
                 " Stock: " + stock;
     }

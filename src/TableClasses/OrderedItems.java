@@ -1,48 +1,33 @@
 package TableClasses;
 
 public class OrderedItems {
-    private int id;
-    private int placedOrderId;
-    private int shoeId;
+    private final int id;
+    private final PlacedOrder placedOrder;
+    private final Shoe shoe;
     
-
-    public OrderedItems(){
-        
-    }
-    public OrderedItems(int id, int placedOrderId, int shoeId) {
+    public OrderedItems(int id, PlacedOrder placedOrder, Shoe shoe) {
         this.id = id;
-        this.placedOrderId = placedOrderId;
-        this.shoeId = shoeId;
+        this.placedOrder = placedOrder;
+        this.shoe = shoe;
     }
 
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    
+    public PlacedOrder getPlacedOrder() {
+        return placedOrder;
     }
 
-    public int getPlacedOrderId() {
-        return placedOrderId;
+    public Shoe getShoe() {
+        return shoe;
     }
 
-    public void setPlacedOrderId(int placedOrderId) {
-        this.placedOrderId = placedOrderId;
-    }
-
-    public int getShoeId() {
-        return shoeId;
-    }
-
-    public void setShoeId(int shoeId) {
-        this.shoeId = shoeId;
-    }
     @Override
     public String toString() {
         return  "OrderedItems: " +
                 "Id: " + id +
-                " PlacedOrderId: " + placedOrderId +
-                " ShoeId: " + shoeId;
+                " PlacedOrderId: " + placedOrder +
+                " ShoeId: " + shoe;
     }
 }
